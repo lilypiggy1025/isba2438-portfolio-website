@@ -1,0 +1,21 @@
+.page { position: relative; min-height: 100svh; background: #faf9f5; color: #344d42; }
+.content { width: min(1100px, 85%); margin: auto; padding: 145px 0 75px; }
+.content.landing { padding-top: 85px; padding-bottom: 100px; }
+.content .heading { position: static; margin: 0; font: 400 clamp(36px, 4vw, 54px)/1.2 Georgia, serif; letter-spacing: -1px; text-align: center; }
+.subtitle { text-align: center; margin: 16px 0 45px; color: #82907c; font-size: 15px; }
+.landing .grid { width: calc(80% + 6px); margin-inline: auto; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+.card { position: relative; min-width: 0; aspect-ratio: 1 / 1.1; overflow: hidden; border-radius: 26px; box-shadow: 0 10px 30px #344d4214; transition: transform .3s ease, box-shadow .3s ease; }
+.card:hover { transform: translateY(-5px); box-shadow: 0 16px 35px #344d4226; }
+.photo { object-fit: cover; }
+.shade { position: absolute; inset: 0; background: #18281e55; pointer-events: none; }
+.cardContent { position: relative; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 28px; color: white; text-align: center; }
+.cardContent h2 { margin: 0 0 32px; font: 400 clamp(25px, 2.7vw, 38px)/1.2 Georgia, serif; }
+.explore { display: inline-flex; align-items: center; gap: 25px; padding: 13px 26px; border-radius: 30px; background: #fffef7; color: #344d42; font-size: 14px; }
+.explore:focus-visible { outline: 2px solid white; outline-offset: 5px; }
+.back { display: inline-block; margin-bottom: 30px; font-size: 14px; }
+.detailPhoto { position: relative; height: min(60vh, 600px); margin-top: 35px; border-radius: 24px; overflow: hidden; }
+.srOnly { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+@media (max-width: 700px) { .landing .grid { width: 100%; } .grid { grid-template-columns: 1fr; gap: 25px; } .content { padding-top: 135px; } .content.landing { padding-top: 110px; } .card { aspect-ratio: 1; } }
+@media (max-width: 360px) { .content.landing { padding-top: 135px; } }
+@media (prefers-reduced-motion: reduce) { .card { transition: none; } }

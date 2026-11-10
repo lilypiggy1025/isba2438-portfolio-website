@@ -1,0 +1,32 @@
+.creative { width: min(1380px, 88%); margin: auto; padding: 90px 0 65px; color: #425d49; }
+.titleGroup { position: relative; top: 35px; }
+.creative h1 { position: static; margin: 0; text-align: center; font: 400 clamp(36px, 4.3vw, 62px)/1.15 Georgia, serif; letter-spacing: -1.5px; }
+.subtitle { margin: 15px 0 0; text-align: center; font: italic 14px/1.6 Georgia, serif; color: #a0a49b; }
+.illustrations { display: flex; align-items: center; justify-content: space-between; padding: 15px 6% 20px; }
+.camera { width: 105px; height: auto; mix-blend-mode: multiply; }
+.returnArrow { display: block; width: 100px; }
+.returnArrow img { width: 100%; height: auto; mix-blend-mode: multiply; }
+.gallery { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: clamp(10px, 1.7vw, 25px); }
+.thumbnail { display: block; position: relative; width: 100%; aspect-ratio: 9 / 16; overflow: hidden; border: 0; padding: 0; border-radius: 14px; background: #eceee6; cursor: zoom-in; }
+.thumbnail img { object-fit: cover; }
+.thumbnail:focus-visible, .returnArrow:focus-visible { outline: 2px solid #67815c; outline-offset: 5px; }
+.lightbox { position: fixed; inset: 0; width: 100vw; max-width: none; height: 100dvh; max-height: none; padding: 60px; margin: 0; border: 0; background: #111b; color: white; overflow: hidden; }
+.lightbox::backdrop { background: #0005; }
+.enlarged { position: relative; width: 100%; height: 100%; pointer-events: none; }
+.enlarged img { object-fit: contain; }
+.lightbox button { position: absolute; z-index: 1; border: 1px solid #ffffff70; border-radius: 50%; width: 44px; height: 44px; background: #15151599; color: white; font: 30px/1 Arial, sans-serif; cursor: pointer; }
+.lightbox button:focus-visible { outline: 2px solid white; outline-offset: 4px; }
+.close { top: 16px; right: 18px; }
+.previous { top: calc(50% - 22px); left: 10px; }
+.next { top: calc(50% - 22px); right: 10px; }
+.counter { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); font-size: 13px; }
+@media (max-width: 760px) {
+  .titleGroup { top: 15px; }
+  .creative { width: 90%; padding-top: 100px; }
+  .gallery { display: flex; overflow-x: auto; gap: 16px; padding: 6px 4px 20px; scroll-snap-type: x proximity; }
+  .thumbnail { flex: 0 0 42vw; scroll-snap-align: start; }
+  .illustrations { padding: 22px 4% 18px; }
+  .camera { width: 80px; } .returnArrow { width: 80px; }
+  .subtitle { font-size: 12px; }
+  .lightbox { padding: 65px 52px; }
+}

@@ -1,0 +1,27 @@
+.board { width: min(1160px, 85%); margin: auto; padding: 125px 0 140px; color: #425d49; }
+.titleArea h1 { position: static; margin: 0; text-align: center; font: 400 clamp(36px, 4.3vw, 62px)/1.15 Georgia, serif; letter-spacing: -1.5px; }
+.subtitle { margin: 15px 0 0; text-align: center; font: italic 14px/1.6 Georgia, serif; color: #a0a49b; }
+.arrowRow { display: flex; justify-content: flex-end; padding: 15px 3% 15px; }
+.arrowRow a { display: block; width: 100px; }
+.arrowRow a:focus-visible { outline: 2px solid #67815c; outline-offset: 5px; }
+.arrow { display: block; width: 100%; height: auto; mix-blend-mode: multiply; }
+.editorial { margin-top: -100px; display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); align-items: center; gap: clamp(45px, 7vw, 100px); }
+.prose { width: calc(100% + clamp(45px, 7vw, 100px) - 45px); min-width: 0; padding: 40px; background: #fffefb; border: 1px solid #e9ede4; border-radius: 28px; box-shadow: 0 8px 28px #425d4909; font: 600 19.55px/1.95 Georgia, serif; color: #596454; }
+.openingWord { font-size: 1.8em; line-height: 1.2; }
+.prose p { margin: 0 0 30px; }
+.prose p:last-child { margin-bottom: 0; }
+.collage { transform: scale(.8); transform-origin: center center; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 25px; padding: 14px 12px 40px; }
+.frame { min-width: 0; margin: 0; padding: 10px 10px 28px; background: #fff; box-shadow: 0 5px 14px #333b2921; transform: rotate(-4deg); }
+.frame img { display: block; width: 100%; height: auto; }
+.frame:nth-child(2) { transform: translateY(23px) rotate(3deg); }
+.frame:nth-child(3) { transform: translate(6px, 4px) rotate(4deg); }
+.frame:nth-child(4) { transform: translateY(30px) rotate(-3deg); }
+@media (max-width: 760px) {
+  .board { width: 86%; padding: 120px 0 100px; }
+  .editorial { margin-top: 0; grid-template-columns: 1fr; gap: 35px; }
+  .prose { width: 100%; font-size: 18.4px; padding: 28px clamp(24px, 5vw, 36px); }
+  .arrowRow { padding: 20px 0; }
+  .arrowRow a { width: 80px; }
+  .collage { gap: 24px 20px; padding-inline: 8px; }
+  .frame { padding: 7px 7px 22px; }
+}

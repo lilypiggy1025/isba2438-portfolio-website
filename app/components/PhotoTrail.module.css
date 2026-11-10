@@ -1,0 +1,47 @@
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.card {
+  position: absolute;
+  aspect-ratio: 3 / 4;
+  background: #fffdf8;
+  border: 5px solid #fffdf8;
+  border-radius: 4px;
+  box-shadow: 0 8px 24px #263e3226;
+  opacity: 0;
+  transform-origin: center center;
+  transform: rotate(var(--rotation)) scale(.1);
+}
+
+.ready { animation: appear 1800ms linear both; }
+
+.photo { object-fit: contain; }
+
+@keyframes appear {
+  /* Each third lasts 600ms; easing belongs to the phase starting here. */
+  0% {
+    opacity: 0;
+    transform: rotate(var(--rotation)) scale(.1);
+    animation-timing-function: ease-out;
+  }
+  33.333333% {
+    opacity: 1;
+    transform: rotate(var(--rotation)) scale(1);
+    animation-timing-function: linear;
+  }
+  66.666667% {
+    opacity: 1;
+    transform: rotate(var(--rotation)) scale(1);
+    animation-timing-function: ease-in;
+  }
+  100% { opacity: 0; transform: rotate(var(--rotation)) scale(.1); }
+}
+
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .overlay { display: none; }
+}
