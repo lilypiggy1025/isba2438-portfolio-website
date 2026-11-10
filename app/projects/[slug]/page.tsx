@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { projects } from "../projects";
 import CreativeGallery from "./CreativeGallery";
@@ -17,7 +18,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: `${project.title} | LIWEN CHEN` };
 }
 
-export default async function ProjectPage({ params }: Props) {
+export default function ProjectPage({ params }: Props) {
+  return <Suspense fallback={<p role="status">Loading project…</p>}>
+    <ProjectContent params={params} />
+  </Suspense>;
+}
+
+async function ProjectContent({ params }: Props) {
   const { slug } = await params;
   const project = projects.find((item) => item.slug === slug);
   if (!project) notFound();
