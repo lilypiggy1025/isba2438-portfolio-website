@@ -1,0 +1,118 @@
+.spread {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 520px) minmax(0, 1fr);
+  grid-template-areas: "left editor right";
+  align-items: start;
+  gap: clamp(24px, 3.5vw, 44px);
+}
+
+.editor {
+  grid-area: editor;
+  min-width: 0;
+  text-align: center;
+}
+
+.editor > form {
+  margin-inline: auto;
+  background: #fffef9;
+  padding: clamp(20px, 4vw, 36px);
+}
+
+.editor > form label {
+  font-size: 18px;
+  padding-left: 12px;
+  text-align: left;
+}
+
+.editor button[type="submit"] {
+  justify-self: center;
+}
+
+.photos {
+  display: grid;
+  align-content: start;
+  gap: 25px;
+  min-width: 0;
+  padding-inline: 8px;
+  pointer-events: none;
+}
+
+.left {
+  grid-area: left;
+  padding-top: 42px;
+}
+
+.right {
+  grid-area: right;
+  padding-top: 18px;
+}
+
+.print {
+  margin: 0;
+  width: var(--print-width, 88%);
+  justify-self: var(--print-position, start);
+  padding: 7px 7px 14px;
+  background: #f8f0e0;
+  border: 1px solid #e8ddc9;
+  border-radius: 2px;
+  box-shadow: 0 8px 16px #53463326;
+  transform: rotate(var(--print-angle, -6deg));
+}
+
+.print img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.left .print:nth-child(2) {
+  --print-width: 78%;
+  --print-position: end;
+  --print-angle: 5deg;
+  margin-top: 9px;
+}
+
+.left .print:nth-child(3) {
+  --print-width: 93%;
+  --print-angle: -3deg;
+}
+
+.right .print:nth-child(1) {
+  --print-width: 79%;
+  --print-position: end;
+  --print-angle: 7deg;
+}
+
+.right .print:nth-child(2) {
+  --print-width: 96%;
+  --print-angle: -5deg;
+  margin-top: 8px;
+}
+
+.right .print:nth-child(3) {
+  --print-width: 82%;
+  --print-position: end;
+  --print-angle: 4deg;
+  margin-top: 10px;
+}
+
+@media (max-width: 800px) {
+  .spread {
+    max-width: 520px;
+    margin-inline: auto;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "editor" "left" "right";
+    gap: 22px;
+  }
+
+  .photos {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: center;
+    gap: clamp(8px, 3vw, 20px);
+    padding: 0 8px;
+  }
+
+  .print {
+    padding: 4px 4px 8px;
+  }
+}

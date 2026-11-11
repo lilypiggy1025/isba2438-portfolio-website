@@ -1,0 +1,120 @@
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2.5fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(18px, 4vw, 48px);
+  padding: 28px 10px clamp(48px, 8vw, 86px);
+}
+
+.intro { text-align: center; }
+
+.label {
+  margin: 0 0 16px;
+  color: #536b5b;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .2em;
+}
+
+.intro h1 {
+  margin: 0;
+  font: 400 clamp(38px, 6vw, 72px)/1.04 Georgia, serif;
+  letter-spacing: -.045em;
+  text-wrap: balance;
+}
+
+.subtitle {
+  max-width: 35ch;
+  margin: 20px auto 24px;
+  color: #536b5b;
+  line-height: 1.65;
+}
+
+.createLink { display: inline-block; }
+.createLink:hover { background: #476457; }
+
+.print {
+  width: 100%;
+  max-width: 200px;
+  margin: 0;
+  padding: 7px 7px 15px;
+  border: 1px solid #e8ddc9;
+  border-radius: 2px;
+  background: #f8f0e0;
+  box-shadow: 0 8px 16px #53463326;
+}
+
+.print img { display: block; width: 100%; height: auto; }
+.firstPrint { justify-self: end; transform: translateY(-22px) rotate(-8deg); }
+.secondPrint { transform: translateY(26px) rotate(6deg); }
+
+.entries {
+  border-top: 1px solid #dce4d8;
+  padding-top: clamp(24px, 4vw, 40px);
+}
+
+.sectionHeading {
+  margin: 0 0 24px;
+  text-align: center;
+  font: 400 clamp(29px, 4vw, 42px)/1.15 Georgia, serif;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.story,
+.empty {
+  padding: clamp(20px, 4vw, 36px);
+  border: 1px solid #e2e8dc;
+  border-radius: 4px;
+  background: #fffef9;
+}
+
+.story {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow-wrap: anywhere;
+}
+
+.story h3,
+.empty h3 {
+  margin: 10px 0 12px;
+  font: 400 clamp(23px, 3vw, 32px)/1.18 Georgia, serif;
+}
+
+.story p {
+  margin: 0 0 20px;
+  color: #536b5b;
+  line-height: 1.65;
+}
+
+.storyLink {
+  margin-top: auto;
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.storyLink:hover { color: #536b5b; }
+
+.empty {
+  max-width: 620px;
+  margin-inline: auto;
+  padding-block: clamp(32px, 6vw, 60px);
+  text-align: center;
+}
+
+.empty span { color: #748879; font: 28px/1 Georgia, serif; }
+
+@media (max-width: 650px) {
+  .hero { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 30px; }
+  .intro { grid-area: 1 / 1 / 2 / -1; }
+  .print { max-width: 150px; }
+  .firstPrint { transform: rotate(-8deg); }
+  .secondPrint { transform: translateY(8px) rotate(6deg); }
+  .grid { grid-template-columns: minmax(0, 1fr); }
+}

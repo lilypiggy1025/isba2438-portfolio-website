@@ -1,0 +1,17 @@
+.page { position: relative; min-height: 100svh; background: #faf9f5; color: #344d42; }
+.main { width: min(980px, 90%); margin-inline: auto; padding: 135px 0 72px; }
+.heading { margin: 0 0 24px; font: 400 clamp(32px, 6vw, 54px)/1.15 Georgia, serif; overflow-wrap: anywhere; }
+.link { display: inline-block; margin-bottom: 20px; text-decoration: underline; text-underline-offset: 4px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 20px; }
+.card { min-width: 0; padding: clamp(18px, 4vw, 32px); border: 1px solid #e2e8dc; border-radius: 22px; background: #fffef9; box-shadow: 0 8px 24px #344d4210; overflow-wrap: anywhere; }
+.card h2 { margin: 8px 0 12px; font: 400 26px/1.2 Georgia, serif; }
+.card a { text-decoration: underline; text-underline-offset: 4px; }
+.date { color: #536b5b; font-size: 14px; }
+.content { white-space: pre-wrap; line-height: 1.7; }
+.form { display: grid; gap: 16px; max-width: 680px; }
+.field { display: grid; gap: 8px; }
+.field input, .field textarea { width: 100%; padding: 12px; border: 1px solid #b6c5b5; border-radius: 12px; background: #fff; font: inherit; color: inherit; }
+.field textarea { resize: vertical; }
+.button { justify-self: start; border: 0; border-radius: 30px; padding: 12px 22px; background: #344d42; color: #fff; font: inherit; cursor: pointer; }
+.button:disabled { opacity: .65; cursor: wait; }
+.error { color: #8c3139; }

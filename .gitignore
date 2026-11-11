@@ -43,3 +43,7 @@ next-env.d.ts
 # Local contact submissions
 /data/contact-submissions.json
 /data/contact-submissions.json.*.tmp
+
+# Local blog data
+/data/blog-posts.json
+/data/blog-posts.json.*.tmp
