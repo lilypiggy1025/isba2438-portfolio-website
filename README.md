@@ -1,91 +1,120 @@
 # Liwen Chen — Creative Portfolio
 
-Santa Clara University · ISBA 2438 · Assignment 2, Parts 1 and 2
+Santa Clara University · ISBA 2438 · Assignment 2, Parts 1 and 2 · Midterm Expanded Portfolio (`midterm`)
 
 ## Project Overview
 
-A creative personal portfolio built with Next.js App Router, React, TypeScript, and CSS Modules, with Tailwind CSS available in the existing setup. The site combines a soft scrapbook aesthetic with photography and an interactive homepage.
+A personal portfolio built with Next.js 16.4.6 App Router, React 19.3.0, TypeScript, and CSS Modules, with Tailwind CSS available in the existing setup. The Midterm extends Assignment 2 with browser-persisted Favorites, a full-CRUD Guestbook, and Blog, Project, and Contact management. Photography, sage-green accents, cream paper surfaces, and scrapbook details connect the pages visually.
 
 ## Implemented Pages
 
-| Route | Page |
+| Route | Purpose |
 | --- | --- |
-| `/` | Home |
-| `/about-me` | About Me |
-| `/projects` | Projects |
-| `/contact-me` | Part 2 contact form using the JSON API |
-| `/contact-me-server-form` | Part 1 contact form using a Server Action |
-| `/admin/blogs` | Publish a blog post |
-| `/blogs` | Public Creative Journal and published posts |
-| `/blogs/[slug]` | Individual blog post |
-| `/projects/creative-space` | Creative Space project detail |
-| `/projects/inspiration-board` | Inspiration Board project detail |
+| `/` | Interactive homepage with a mouse-following photo trail |
+| `/about-me` | Personal profile |
+| `/projects` | Backend-driven project listing |
+| `/projects/creative-space` | Original photography gallery and keyboard-accessible lightbox |
+| `/projects/inspiration-board` | Original editorial photography collage |
+| `/projects/[slug]` | Project details, including a scrapbook layout for newly created standard projects |
+| `/blogs` | Creative Journal listing |
+| `/blogs/[slug]` | Individual article with Edit and Delete controls |
+| `/admin/blogs` | Blog publishing form; publishing requires an administrator session |
+| `/my-favorites` | Browser-local Movies, Books, Music, and Websites collection |
+| `/my-guestbook` | Visitor guestbook with create, read, edit, and delete |
+| `/contact-me` | Assignment 2 Part 2 contact form using the JSON API |
+| `/contact-me-server-form` | Assignment 2 Part 1 contact form using a Server Action |
+| `/admin/contacts` | Administrator login and protected submission management |
+| `/admin/projects` | Shared administrator login and project management |
+| `/my-notes` | Compatibility redirect to `/my-favorites` |
 
-Project details use `app/projects/[slug]/page.tsx`. The supported slugs are `creative-space` and `inspiration-board`; unknown slugs call `notFound()` and return a 404 page.
+## Midterm Features
 
-## Key Features
+### Favorites
 
-- Responsive creative portfolio interface with shared, pathname-aware navigation.
-- Mouse-following homepage photo trail with reduced-motion support.
-- Two distinct dynamic project detail pages, including a photography lightbox and an editorial inspiration collage.
-- Server-side contact form validation with clear success, validation-error, and failure feedback.
-- Local JSON storage for valid contact submissions.
+Favorites have a required title and category, plus an optional description. Users can create, view, edit, and delete records. The client component saves JSON under `liwen-portfolio:my-favorites:v1` in browser LocalStorage and restores it after refresh.
 
-## Contact Forms
+Missing keys and empty arrays show an empty state. Malformed JSON, invalid records, or unavailable storage display English errors. Loading failures disable saving and preserve stored data. Failed writes retain the draft and previous collection. Favorites belong to the current browser and origin; clearing browser data removes them. The previous My Notes storage key is preserved separately.
 
-- **Part 1:** `/contact-me-server-form` submits through the Next.js Server Action in `app/contact-me-server-form/actions.ts`.
-- **Part 2:** The shared Contact link opens `/contact-me`. Its client form sends `name`, `email`, and `message` as JSON to `POST /api/contacts`. `POST /api/contact` is a compatibility alias for the same handler. The API returns `201` on success, `400` for invalid input, and `500` if saving fails.
+### Guestbook
 
-Both forms use the same server-side validation and storage modules in `lib/contact/`. Valid submissions go to `data/contact-submissions.json`, with an ID and creation timestamp for each record. Invalid submissions are rejected before writing.
+Visitors can create, view, edit, and delete entries containing a name and message. `Guestbook.tsx` owns form state and API requests, passing entry data, callbacks, and pending state through props to the reusable `GuestbookEntry.tsx` child.
 
-## Blog
+The API validates names up to 60 characters and messages up to 500 characters, then persists entries with IDs and timestamps in server-side JSON. Inline errors, loading and empty states, success feedback, and delete confirmation support the workflow. Guestbook CRUD is public, including editing and deleting visitor entries. Successful creation logs the generated entry ID and HTTP status 201 without logging submitted content.
 
-- `/admin/blogs` submits a title and content to `POST /api/blogs`. A successful publish returns `201` and the new post's URL. Posts are stored in `data/blog-posts.json` with unique slugs and creation timestamps.
-- `/blogs` fetches published posts through `GET /api/blogs` and shows a prompt to create the first post when the list is empty.
-- `/blogs/[slug]` displays the published post for that slug. The route proxy checks unknown slugs before streaming to return HTTP `404`, and the detail page also calls `notFound()` if the post is missing.
+### Blogs, Projects, and Contact CRUD
+
+- **Blogs** support public listing/detail reads and administrator-authorized creation, updates, and deletion. Editing retains the original slug and creation timestamp. Sign in through an administrator login page before using `/admin/blogs` or article management controls.
+- **Projects** support public reads and administrator-authorized creation, updates, and deletion. Existing gallery/collage layouts and image collections are preserved. New projects use the standard detail layout. Management selects existing local public images. Updates preserve slugs, layout types, and creation timestamps.
+- **Contact** retains both public submission forms and their shared validation/storage. Administrators can list, read, edit, and delete submissions separately at `/admin/contacts`. Submission IDs and creation timestamps survive edits.
+
+Contact and Project management share the same administrator session used for Blog mutations. Authentication is enforced on the server before protected data access or mutation. Signed sessions expire after one hour and use HttpOnly, SameSite=Strict cookies, with Secure enabled in production. Authenticated mutations also require a matching Origin. Logout clears the browser cookie; a copied stateless token remains valid until expiry or secret rotation.
+
+## APIs and Data Flow
+
+| Endpoint | Methods | Access |
+| --- | --- | --- |
+| `/api/blogs` | GET, POST | GET public; POST administrator |
+| `/api/blogs/[slug]` | PUT, DELETE | Administrator |
+| `/api/projects` | GET, POST | GET public; POST administrator |
+| `/api/projects/[slug]` | GET, PUT, DELETE | GET public; mutations administrator |
+| `/api/guestbook` | GET, POST | Public |
+| `/api/guestbook/[id]` | GET, PUT, DELETE | Public |
+| `/api/contacts` | GET, POST | GET administrator; POST public |
+| `/api/contacts/[id]` | GET, PUT, DELETE | Administrator |
+| `/api/contact` | POST | Public compatibility alias |
+| `/api/contact-admin/session` | POST, DELETE | Same-origin login and logout |
+
+Successful creation returns HTTP 201, reads and updates return 200, and deletion returns 204 with no body. APIs use 400 for invalid input, 401 for denied protected access, 404 for missing records, and generic 500 responses for storage failures.
+
+Favorites flow from the client component directly to browser LocalStorage. Guestbook and management interfaces send requests to Route Handlers, which validate input and call shared storage modules under `lib/`. Public Project pages and Blog detail pages read those stores on the server. The Part 1 Contact Server Action calls the Contact store directly.
+
+| Server-side file | Records |
+| --- | --- |
+| `data/blog-posts.json` | Blog articles |
+| `data/projects.json` | Projects |
+| `data/guestbook-entries.json` | Guestbook entries |
+| `data/contact-submissions.json` | Contact submissions |
+
+Stores serialize mutations within each store instance and write through unique temporary files followed by atomic rename. Missing Blog, Guestbook, and Contact files start empty. Missing Project storage uses the original two project seeds, which are included in the first persisted mutation. An existing empty Projects array remains empty. Malformed storage is rejected without overwriting it.
 
 ## Running Locally
 
-Install Node.js (tested with v26.13.0) and npm, then run from the project root:
+Use Node.js with native TypeScript type stripping and `node:module` registration hooks for the tests. The project has been tested with Node.js v26.13.0 and npm.
+
+From the repository root, install dependencies and start development mode.
 
 ```bash
 npm ci
 npm run dev
 ```
 
-Open `http://localhost:3000`. Use **Contact** for the Part 2 form or visit `/contact-me-server-form` directly for Part 1.
+Open `http://localhost:3000`. For administrator operations, configure `CONTACT_ADMIN_SECRET` in the ignored `.env.local` file using a securely generated random value of at least 32 characters. Keep it server-side. Restart the development server after configuring it, then sign in at `/admin/contacts` or `/admin/projects` using that value. Use the same browser and hostname for Blog management. Missing or insufficient configuration denies administrator access. No credentials are included in this repository.
 
-The scripts defined in `package.json` are:
+Available package scripts are `npm run dev`, `npm run lint`, `npm run build`, and `npm run start`. To run the production server, complete the build first.
 
-| Command | Purpose |
-| --- | --- |
-| `npm run dev` | Start the development server |
-| `npm run lint` | Run ESLint |
-| `npm run build` | Attempt a production build |
-| `npm run start` | Start the production server after a successful build |
+```bash
+npm run build
+npm run start
+```
 
-## Validation and Testing
-
-The tests import TypeScript directly and require Node.js with native TypeScript type stripping. From the project root, run:
+## Testing and Validation
 
 ```bash
 node --test tests/*.test.mjs
-npx tsc --noEmit --incremental false
 npm run lint
+npx tsc --noEmit --incremental false
 ```
 
-The tests cover contact validation, shared persistence across both contact API routes and the Server Action, and blog API validation, persistence, retrieval, and unique slugs.
+The current suite has **38 passing automated tests**. ESLint, TypeScript, and whitespace checks passed. Tests cover isolated JSON persistence, validation, CRUD APIs, administrator sessions and Origin protection, project seed/dynamic-route behavior, and Favorites parsing and mocked component feedback. Component/source checks supplement API tests; they do not replace browser interaction testing. Backend tests use temporary storage, and Favorites tests use isolated browser-API mocks.
 
-In the audit environment, Turbopack's CSS processing was denied permission to bind a local port during `npm run build`. Production build completion has yet to be verified.
+After the final Blog POST authorization change, the project owner confirmed two successful Mac production builds with Next.js 16.4.6 and generation of all 23 static pages. Builds inside the restricted Codex environment encountered a separate Turbopack local-port-binding restriction. Node tests may emit non-failing module-type warnings.
 
-## Storage and Deployment Limitations
+## Storage, Privacy, and Deployment
 
-Both stores create their JSON file on the first successful save if it is absent. JSON persistence requires a writable filesystem and a Node.js server environment. Files may be ephemeral on serverless hosts or disappear during redeployment. The process-local queue does not coordinate multiple processes or deployment instances.
+Runtime JSON files and their temporary files are excluded by `.gitignore`, along with environment files, `node_modules`, and `.next`. Local submissions and posts are intentionally absent from a fresh clone. Keep Contact personal information and administrator credentials out of commits, screenshots, and deployment archives.
 
-This assignment's local JSON storage is not a durable multi-instance production database. A production deployment would need suitable persistent storage and cross-instance concurrency handling.
+Server-side JSON persistence requires a writable, persistent filesystem and a Node.js runtime. Serverless filesystems may be ephemeral, and process-local queues do not coordinate independent processes or deployment instances. Durable multi-instance hosting requires suitable persistent storage and concurrency handling. Production administrator login requires HTTPS for Secure cookies.
 
-## Privacy
+## MIT License
 
-`.gitignore` excludes `data/contact-submissions.json`, `data/blog-posts.json`, and both stores' temporary write files. A fresh clone starts without local submissions or posts. Contact submissions must not be published, committed, included in public archives, or uploaded with deployment artifacts. Do not force-add ignored data files. Ignore rules do not remove files already tracked by Git, so review the submission file list before publishing.
-
-Environment files, `node_modules`, and `.next` are also ignored. Keep credentials and personal submission data out of public documentation and screenshots.
+Licensed under the [MIT License](LICENSE). Copyright (c) 2026 LIWEN CHEN. The bundled Pinyon Script font retains its separate license in `public/fonts/PinyonScript-OFL.txt`.
