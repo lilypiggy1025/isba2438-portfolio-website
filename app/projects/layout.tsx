@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import localFont from "next/font/local";
 import headerStyles from "../page.module.css";
 import styles from "./page.module.css";
@@ -10,7 +11,7 @@ export default function ProjectsLayout({ children }: { children: React.ReactNode
   return <div className={`${styles.page} ${pinyon.variable}`}>
     <header className={headerStyles.header}>
       <Link href="/" className={headerStyles.wordmark} aria-label="Portfolio home">Portfolio<span aria-hidden="true">✧</span></Link>
-      <ProjectsNavigation />
+      <Suspense fallback={null}><ProjectsNavigation /></Suspense>
     </header>
     {children}
   </div>;

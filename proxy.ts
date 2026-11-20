@@ -6,7 +6,11 @@ export async function proxy(request: NextRequest) {
 
   // Check existence before streaming can send a successful HTTP status.
   try {
-    if (await blogStore.find(decodeURIComponent(slug))) return NextResponse.next();
+    const decodedSlug = decodeURIComponent(slug);
+    if (request.nextUrl.pathname.startsWith("/projects/")) {
+      const { projectStore } = await import("@/lib/projects/storage");
+      if (await projectStore.find(decodedSlug)) return NextResponse.next();
+    } else if (await blogStore.find(decodedSlug)) return NextResponse.next();
   } catch (error) {
     // Let the page's error boundary handle storage failures.
     if (!(error instanceof URIError)) return NextResponse.next();
@@ -15,4 +19,4 @@ export async function proxy(request: NextRequest) {
   return NextResponse.rewrite(new URL("/404", request.url), { status: 404 });
 }
 
-export const config = { matcher: "/blogs/:slug" };
+export const config = { matcher: ["/blogs/:slug", "/projects/:slug"] };

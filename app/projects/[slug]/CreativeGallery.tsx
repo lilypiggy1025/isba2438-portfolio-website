@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import type { Project } from "@/lib/projects/types";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import styles from "./CreativeGallery.module.css";
@@ -9,7 +10,7 @@ const photos = [2958, 2959, 2960, 2961, 2962, 2963].map((number, index) => ({
   src: `/creative-space/IMG_${number}.jpg`, label: `Creative Space photograph ${index + 1}`,
 }));
 
-export default function CreativeGallery() {
+export default function CreativeGallery({ project }: { project: Project }) {
   const [selected, setSelected] = useState<number | null>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement | null>(null);
@@ -33,9 +34,10 @@ export default function CreativeGallery() {
 
   return <main className={styles.creative}>
     <div className={styles.titleGroup}>
-      <h1>My Creative Space</h1>
-      <p className={styles.subtitle}>Click any label to unfold images in that line ✦</p>
+      <h1>{project.title}</h1>
+      <p className={styles.subtitle}>{project.subtitle}</p>
     </div>
+    {project.description && <p className={styles.subtitle} style={{ whiteSpace: "pre-wrap" }}>{project.description}</p>}
     <div className={styles.illustrations}>
       <Image src="/creative-space/IMG_2964.jpg" alt="Hand-drawn camera" width={1123} height={1354} className={styles.camera} />
       <Link href="/projects" aria-label="Return to My Projects" className={styles.returnArrow}>

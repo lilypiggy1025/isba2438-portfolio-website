@@ -47,3 +47,9 @@ next-env.d.ts
 # Local blog data
 /data/blog-posts.json
 /data/blog-posts.json.*.tmp
+
+# Local Guestbook and Projects runtime data
+/data/guestbook-entries.json
+/data/guestbook-entries.json.*.tmp
+/data/projects.json
+/data/projects.json.*.tmp

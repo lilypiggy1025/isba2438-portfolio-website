@@ -1,3 +1,4 @@
+import { requireContactAdmin, protectedHeaders } from "@/lib/contact/auth";
 import { blogStore } from "@/lib/blog/storage";
 import { validateBlog } from "@/lib/blog/validation";
 
@@ -12,18 +13,20 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const denied = requireContactAdmin(request);
+  if (denied) return denied;
   let body: unknown;
   try {
     body = await request.json();
   } catch {
-    return Response.json({ ok: false, message: "Send valid JSON." }, { status: 400 });
+    return Response.json({ ok: false, message: "Send valid JSON." }, { status: 400, headers: protectedHeaders });
   }
 
   const result = validateBlog(body);
   if (!result.valid) {
     return Response.json(
       { ok: false, message: "Check the fields below.", errors: result.errors },
-      { status: 400 },
+      { status: 400, headers: protectedHeaders },
     );
   }
 
@@ -31,9 +34,9 @@ export async function POST(request: Request) {
     const post = await blogStore.save(result.values);
     return Response.json({ ok: true, post }, {
       status: 201,
-      headers: { Location: "/blogs/" + post.slug },
+      headers: { ...protectedHeaders, Location: "/blogs/" + post.slug },
     });
   } catch {
-    return Response.json({ ok: false, message: "Could not save the post. Please try again." }, { status: 500 });
+    return Response.json({ ok: false, message: "Could not save the post. Please try again." }, { status: 500, headers: protectedHeaders });
   }
 }

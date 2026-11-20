@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { blogStore } from "@/lib/blog/storage";
 import BlogShell from "../BlogShell";
 import styles from "../blog.module.css";
+import BlogPostActions from "./BlogPostActions";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -28,6 +29,7 @@ async function PostContent({ params }: Props) {
       <time className={styles.date} dateTime={post.createdAt}>{post.createdAt.slice(0, 10)}</time>
       <h1 className={styles.heading}>{post.title}</h1>
       <p className={styles.content}>{post.content}</p>
+      <BlogPostActions post={post} />
     </article>
   );
 }

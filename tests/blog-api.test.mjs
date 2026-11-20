@@ -4,13 +4,15 @@ import { registerHooks } from "node:module";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
+import { randomBytes } from "node:crypto";
 
-test("blog API validates, persists, and retrieves posts with stable unique slugs", async () => {
+test("blog API validates, persists, and retrieves posts with stable unique slugs", async (t) => {
   const originalDirectory = process.cwd();
+  const previousSecret = process.env.CONTACT_ADMIN_SECRET;
   const directory = await mkdtemp(join(tmpdir(), "portfolio-blog-"));
   const hooks = registerHooks({
     resolve(specifier, context, nextResolve) {
-      if (specifier.startsWith("@/lib/blog/")) {
+      if (specifier.startsWith("@/lib/")) {
         const url = new URL("../" + specifier.slice(2) + ".ts", import.meta.url);
         return nextResolve(url.href, context);
       }
@@ -21,13 +23,34 @@ test("blog API validates, persists, and retrieves posts with stable unique slugs
 
   try {
     process.chdir(directory);
+    process.env.CONTACT_ADMIN_SECRET = randomBytes(32).toString("hex");
     const { GET, POST } = await import("../app/api/blogs/route.ts");
-    const { BLOG_FILE, createBlogStore } = await import("../lib/blog/storage.ts");
-    const request = (body) => new Request("http://localhost/api/blogs", {
+    const { BLOG_FILE, createBlogStore, blogStore } = await import("../lib/blog/storage.ts");
+    const { createSessionCookie } = await import("../lib/contact/auth.ts");
+    const cookie = createSessionCookie().split(";")[0];
+    const request = (body, token = cookie, origin = "http://localhost") => new Request("http://localhost/api/blogs", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", cookie: token, origin },
       body,
     });
+    const spy = t.mock.method(blogStore, "save");
+    try {
+      for (const [token, origin] of [["", "http://localhost"], [cookie + "tampered", "http://localhost"], [cookie, "https://evil.test"], [cookie, ""]]) {
+        const denied = await POST(request("{", token, origin));
+        assert.equal(denied.status, 401);
+        assert.equal(denied.headers.get("cache-control"), "no-store");
+      }
+      const secret = process.env.CONTACT_ADMIN_SECRET;
+      delete process.env.CONTACT_ADMIN_SECRET;
+      assert.equal((await POST(request("{}"))).status, 401);
+      process.env.CONTACT_ADMIN_SECRET = secret;
+      const now = Date.now();
+      const clock = t.mock.method(Date, "now", () => now + 3601000);
+      try { assert.equal((await POST(request("{}"))).status, 401); }
+      finally { clock.mock.restore(); }
+      assert.equal(spy.mock.callCount(), 0);
+      await assert.rejects(readFile(BLOG_FILE), { code: "ENOENT" });
+    } finally { spy.mock.restore(); }
     const empty = await GET();
     assert.equal(empty.status, 200);
     assert.deepEqual((await empty.json()).posts, []);
@@ -62,6 +85,8 @@ test("blog API validates, persists, and retrieves posts with stable unique slugs
   } finally {
     hooks.deregister();
     process.chdir(originalDirectory);
+    if (previousSecret === undefined) delete process.env.CONTACT_ADMIN_SECRET;
+    else process.env.CONTACT_ADMIN_SECRET = previousSecret;
     await rm(directory, { recursive: true, force: true });
   }
 });

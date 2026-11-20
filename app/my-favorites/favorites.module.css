@@ -1,0 +1,62 @@
+.page header { position: static; }
+.page main { padding-top: 20px; padding-bottom: 48px; }
+.intro { text-align: center; min-width: 0; }
+.intro h1 { margin: 0 0 8px; font: 400 clamp(56px, 8vw, 88px)/1.1 var(--font-pinyon), cursive; }
+.intro p { margin: 0; line-height: 1.7; }
+.titleComposition { display: grid; grid-template-columns: 120px minmax(0, 1fr) 120px; align-items: center; gap: 28px; padding: 8px 16px 22px; }
+.polaroid { width: 100%; min-width: 0; padding: 7px 7px 22px; background: #f5efdf; border: 1px solid #e5dcc7; box-shadow: 2px 5px 7px #493c2920, 4px 13px 22px #493c291a; pointer-events: none; }
+.firstPhoto { margin-top: 24px; transform: rotate(-7deg); }
+.pinkPhoto { align-self: start; transform: rotate(6deg); background: #faf4e7; }
+.contentComposition { display: grid; grid-template-columns: minmax(0, 1fr) 120px; align-items: start; gap: 24px; }
+.collectionPhoto { min-width: 0; padding: 60px 10px 16px 0; }
+.lastPhoto { transform: rotate(-4deg); }
+@media (min-width: 721px) {
+  .lastPhoto { transform: translateY(100px) rotate(-4deg); }
+}
+.polaroid img { display: block; width: 100%; height: auto; object-fit: contain; }
+.workspace { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+.paper, .favorite { min-width: 0; background: #fffef9; border: 1px solid #dce4d7; border-radius: 20px; padding: clamp(20px, 3vw, 30px); box-shadow: 0 8px 26px #344d4210; overflow-wrap: anywhere; }
+.paper { border-top: 7px solid #b9cbb1; }
+.workspace h2 { margin: 0 0 24px; font: 400 27px/1.3 Georgia, serif; }
+.form fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.form label { display: block; margin: 18px 0 8px; font-size: 14px; }
+.form input, .form textarea, .form select { width: 100%; border: 1px solid #a4b69d; border-radius: 10px; padding: 12px; color: #344d42; background: #fcfbf6; font: inherit; line-height: 1.6; }
+.form textarea { resize: vertical; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+.workspace button { border: 1px solid #344d42; border-radius: 24px; padding: 10px 18px; background: #344d42; color: white; font: inherit; cursor: pointer; }
+.workspace button.secondary { background: #edf2e8; color: #344d42; border-color: #a4b69d; }
+.workspace button:hover { filter: brightness(.94); }
+.workspace button:disabled { opacity: .6; cursor: default; }
+.workspace :is(button, input, textarea, select):focus-visible { outline: 2px solid #43664e; outline-offset: 4px; }
+.list { display: grid; gap: 22px; }
+.favorite h3 { margin: 0 0 14px; font: 400 24px/1.35 Georgia, serif; }
+.favorite p { white-space: pre-wrap; line-height: 1.75; margin: 0; }
+.empty { padding: 30px; background: #e6efe5; border-radius: 18px; font: italic 18px/1.7 Georgia, serif; }
+.error { color: #8c3139; line-height: 1.6; }
+.fieldError { color: #943b32; font-size: 13px; line-height: 1.6; margin: 9px 0 14px; }
+.status { color: #355d3c; line-height: 1.6; }
+.error:empty, .status:empty { margin: 0; }
+@media (max-width: 720px) {
+  .workspace { grid-template-columns: 1fr; }
+  .titleComposition { grid-template-columns: 80px minmax(0, 1fr) 80px; gap: 16px; padding-inline: 12px; }
+  .intro h1 { font-size: clamp(44px, 8vw, 58px); }
+  .contentComposition { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .collectionPhoto { justify-self: end; width: 115px; padding: 8px 12px 12px 0; }
+}
+@media (max-width: 480px) {
+  .titleComposition { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px 40px; padding-bottom: 24px; }
+  .intro { grid-column: 1 / -1; grid-row: 1; }
+  .firstPhoto { grid-column: 1; grid-row: 2; width: 78px; justify-self: center; margin-top: 12px; }
+  .pinkPhoto { grid-column: 2; grid-row: 2; width: 78px; justify-self: center; }
+  .polaroid { padding: 5px 5px 16px; }
+}
+
+.category { display: inline-block; margin-bottom: 14px; padding: 5px 12px; border-radius: 16px; background: #e6efe5; color: #43664e; font-size: 13px; }
+
+.favorite .actions { gap: 12px; }
+.favorite .actions button { font-size: 13px; line-height: 1.4; padding: 7px 15px; border: 1px solid #344d42; border-radius: 30px; background: #344d42; color: #fff; }
+.favorite .actions button:last-child { background: #f6f8f1; color: #344d42; border-color: #a4b69d; }
+.favorite .actions button:hover:not(:disabled) { background: #344d42; filter: brightness(.95); }
+.favorite .actions button:last-child:hover:not(:disabled) { background: #f6f8f1; }
+.favorite .actions button:focus-visible { outline: 2px solid #43664e; outline-offset: 4px; }
+.favorite .actions button:disabled { opacity: .65; cursor: wait; }

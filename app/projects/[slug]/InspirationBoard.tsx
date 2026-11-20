@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { Project } from "@/lib/projects/types";
 import Link from "next/link";
 import styles from "./InspirationBoard.module.css";
 
@@ -9,19 +10,23 @@ const photos = [
   { file: "IMG_2957.jpg", width: 1172, height: 1563 },
 ];
 
-export default function InspirationBoard() {
+export default function InspirationBoard({ project }: { project: Project }) {
   return <main className={styles.board}>
     <div className={styles.titleArea}>
-      <h1>My Inspiration Board</h1>
-      <p className={styles.subtitle}>Little moments, endless inspiration ✦</p>
+      <h1>{project.title}</h1>
+      <p className={styles.subtitle}>{project.subtitle}</p>
       <div className={styles.arrowRow}><Link href="/projects" aria-label="Return to My Projects">
         <Image src="/creative-space/IMG_2966.PNG" alt="" width={525} height={368} className={styles.arrow} />
       </Link></div>
     </div>
     <div className={styles.editorial}>
       <div className={styles.prose}>
-        <p><span className={styles.openingWord}>Photography</span> has always been one of my favorite ways to capture the little moments in life. I love traveling to new places, exploring unfamiliar streets, and discovering beauty in everyday scenes.</p>
-        <p><span className={styles.openingWord}>I</span> also enjoy looking through other photographers&apos; work and photo books. Their perspectives inspire me to see the world differently and bring fresh ideas into my own creative journey.</p>
+        {project.description.split(/\n\s*\n/).filter(Boolean).map((paragraph, index) => {
+          const firstSpace = paragraph.indexOf(" ");
+          const opening = firstSpace === -1 ? paragraph : paragraph.slice(0, firstSpace);
+          const rest = firstSpace === -1 ? "" : paragraph.slice(firstSpace);
+          return <p key={index}><span className={styles.openingWord}>{opening}</span>{rest}</p>;
+        })}
       </div>
       <div className={styles.collage} aria-label="Photography inspiration scrapbook">
         {photos.map((photo, index) => <figure className={styles.frame} key={photo.file}>

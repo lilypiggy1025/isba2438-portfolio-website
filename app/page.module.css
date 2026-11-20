@@ -35,7 +35,7 @@
   font: 20px/1 Georgia, serif;
 }
 
-.navigation { display: flex; flex-direction: row; flex-wrap: nowrap; margin-left: auto; gap: clamp(20px, 3vw, 45px); }
+.navigation { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-end; margin-left: auto; gap: clamp(20px, 3vw, 45px); }
 .navigation a {
   color: #354037;
   text-decoration: none;

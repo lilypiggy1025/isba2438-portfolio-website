@@ -15,3 +15,11 @@
 .button { justify-self: start; border: 0; border-radius: 30px; padding: 12px 22px; background: #344d42; color: #fff; font: inherit; cursor: pointer; }
 .button:disabled { opacity: .65; cursor: wait; }
 .error { color: #8c3139; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.postActions { margin-top: 24px; padding-top: 20px; border-top: 1px solid #e2e8dc; }
+.postActions .form { max-width: 100%; }
+.postActions p:empty { margin: 0; }
+.postActions > .actions .button { font-size: 13px; line-height: 1.4; padding: 7px 15px; border: 1px solid #344d42; }
+.postActions > .actions .button:last-child { background: #f6f8f1; color: #344d42; border-color: #a4b69d; }
+.postActions > .actions .button:hover:not(:disabled) { filter: brightness(.95); }
+.actions .button:focus-visible { outline: 2px solid #43664e; outline-offset: 4px; }
